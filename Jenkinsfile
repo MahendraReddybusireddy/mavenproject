@@ -1,7 +1,7 @@
 pipeline{
     agent any
     tools{
-        maven 'maven-3.5.0'
+        maven '3.9.2'
     }
      stages{
          stage('check-out'){
@@ -16,9 +16,10 @@ pipeline{
               
            }
        }
-      stage('deploy'){
-          steps{
-              sh "sudo su - test -c 'ansible-playbook /home/test/deploy.yml'"
+      stage("deploy"){
+       steps{
+        sshagent(['deploy_user']) {
+           sh "scp -o StrictHostkeyChecking=no /opt/Maheshreddy/WebProject.war root@172.31.88.51:/root/apache-tomcat-8.5.89/webapps"
           }
       }
      }
